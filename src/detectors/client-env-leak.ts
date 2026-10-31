@@ -1,3 +1,4 @@
+import { join } from 'path';
 import { readFileSync } from 'fs';
 import { glob } from 'fast-glob';
 import ts from 'typescript';
@@ -43,7 +44,7 @@ export async function detectClientEnvLeak(root: string): Promise<Finding[]> {
   const findings: Finding[] = [];
 
   for (const file of files) {
-    const source = readFileSync(`${root}/${file}`, 'utf8');
+    const source = readFileSync(join(root, file), 'utf8');
     findings.push(...analyzeSource(file, source));
   }
 

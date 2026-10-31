@@ -1,6 +1,6 @@
 {
   "name": "nova-scan",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Security scanner for AI-generated code (Cursor, Lovable, v0, bolt) — catches hardcoded secrets, client env leaks, and unauthenticated backend calls",
   "main": "dist/index.js",
   "bin": {

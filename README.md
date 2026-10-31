@@ -65,3 +65,18 @@ const findings = await detectHardcodedSecrets('./src');
 ## License
 
 MIT © Nova Security
+
+## v0.2.0 — hardening
+
+- **CI-friendly exit codes:** exits `1` when findings exist; pass `--no-fail` to always exit `0`.
+- **SARIF output:** `nova-scan --sarif . > nova.sarif` (SARIF 2.1.0, uploadable to GitHub code scanning).
+- **More secret patterns:** Stripe `sk_live_/sk_test_/rk_*`, OpenAI `sk-proj-`, Anthropic `sk-ant-`, Slack `xox[baprs]-`, Google `AIza`, GitHub `ghp_/gho_/ghu_/ghs_/github_pat_`, AWS, private keys, DB URIs with credentials, Supabase `service_role` JWTs (anon keys are ignored), plus a conservative entropy check for high-entropy values assigned to secret-like names.
+- **More files scanned:** `.env*`, `.json`, `.yml/.yaml`, `.py` in addition to JS/TS (lockfiles ignored).
+- **Tests + CI:** vitest suite for the secrets detector and a GitHub Actions workflow (install, build, test).
+
+```bash
+nova-scan .              # human output, exit 1 on findings
+nova-scan --json .       # JSON
+nova-scan --sarif .      # SARIF 2.1.0
+nova-scan --no-fail .    # never fail the build
+```
