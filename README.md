@@ -32,6 +32,12 @@ nova-scan . --json
 | **Hardcoded secrets** | 🔴 high | API keys (`sk-...`), GitHub tokens (`ghp_...`), AWS keys (`AKIA...`), private keys, database URLs with embedded passwords |
 | **Client env leaks** | 🟠 medium | `VITE_` / `NEXT_PUBLIC_` / `REACT_APP_` variables that expose sensitive values to the browser bundle |
 | **Unauthenticated backend calls** | 🟠 medium / 🟡 low | Supabase queries and RPC calls from client code that may bypass intended authorization |
+| **SQL injection** (`sql-injection`) | 🔴 high | Raw SQL (`query`/`execute`/`knex.raw`/`$queryRawUnsafe`…) built with string concat or template literals from request input (`req.body/query/params`, `searchParams`, `formData`). Tagged `sql\`\`` / Prisma `$queryRaw\`\`` are treated as safe |
+| **Unguarded routes** (`auth-guard`) | 🔴 high / 🟠 medium | NestJS admin, money/wallet and webhook routes without guard / public / signature markers |
+| **Unvalidated input** (`input-validation`) | 🟠 medium | `@Body/@Query/@Param` inputs without DTO validators or parse pipes |
+| **Destructive migrations** (`sql-migration`) | 🔴 high / 🟠 medium | `DROP`, `TRUNCATE`, `DELETE`/`UPDATE` without `WHERE`, renames, type changes, missing transaction |
+| **Unsafe code** (`code-safety`) | 🔴 high / 🟠 medium / 🟡 low | `eval`/`new Function`, `dangerouslySetInnerHTML`, tokens in `localStorage`, `@ts-ignore` |
+| **Env drift** (`env-drift`) | 🟠 medium / 🟡 low | `.env` vs `.env.example`: missing, extra, duplicate or empty keys (values are never printed) |
 
 Findings include file, line, severity, and a redacted snippet.
 
@@ -80,3 +86,10 @@ nova-scan --json .       # JSON
 nova-scan --sarif .      # SARIF 2.1.0
 nova-scan --no-fail .    # never fail the build
 ```
+
+## v0.3.0 — more detectors
+
+- New **sql-injection** rule (TypeScript, AST-free line/taint heuristics).
+- Wrapped five static engines from the Nova scanner suite (vendored CommonJS under `engines/`, zero extra deps): auth-guard, input-validation, sql-migration, code-safety, env-drift.
+- All findings share one format (`file`, `line`, `severity`, `snippet`, `message`, `detector`) and appear in `--json` and `--sarif` with one SARIF rule per detector.
+- 63 tests.

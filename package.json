@@ -1,13 +1,14 @@
 {
   "name": "nova-scan",
-  "version": "0.2.0",
-  "description": "Security scanner for AI-generated code (Cursor, Lovable, v0, bolt) — catches hardcoded secrets, client env leaks, and unauthenticated backend calls",
+  "version": "0.3.0",
+  "description": "Security scanner for AI-generated code (Cursor, Lovable, v0, bolt) \u2014 catches hardcoded secrets, client env leaks, and unauthenticated backend calls, SQL injection, unguarded routes, unvalidated input, destructive migrations, unsafe code, env drift",
   "main": "dist/index.js",
   "bin": {
     "nova-scan": "./dist/index.js"
   },
   "files": [
     "dist",
+    "engines",
     "README.md",
     "LICENSE"
   ],
@@ -29,7 +30,9 @@
     "supabase",
     "secrets",
     "static-analysis",
-    "cli"
+    "cli",
+    "sql-injection",
+    "sarif"
   ],
   "author": "Nova Security",
   "license": "MIT",
